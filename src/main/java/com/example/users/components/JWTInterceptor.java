@@ -1,4 +1,4 @@
-package com.example.users.beans;
+package com.example.users.components;
 
 import com.example.users.utils.JWTUtils;
 import jakarta.servlet.http.HttpServletRequest;
