@@ -33,6 +33,7 @@ public class JWTUtils {
         Map<String, Object> payload = new HashMap<>();
         payload.put("username", refreshTokenModel.getUsername());
         payload.put("email", refreshTokenModel.getEmail());
+        payload.put("role", refreshTokenModel.getRole());
         payload.put("userID", refreshTokenModel.getUserID());
         return payload;
     }

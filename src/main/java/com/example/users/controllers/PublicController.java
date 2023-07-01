@@ -17,12 +17,6 @@ public class PublicController {
     @Autowired
     private AuthService authService;
 
-    @GetMapping("/api-doc")
-    public void getApiDoc(HttpServletResponse httpServletResponse){
-        httpServletResponse.setHeader("Location", "http://localhost:8080/swagger-ui/index.html");
-        httpServletResponse.setStatus(302);;
-    }
-
     @PostMapping("/register")
     @ResponseBody
     public Response register(@RequestBody Map<String, Object> requestParameter, HttpServletResponse response){

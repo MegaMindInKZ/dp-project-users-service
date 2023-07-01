@@ -25,6 +25,7 @@ public class RefreshTokenModel extends Table{
     private String refreshToken;
     private Date createdTime;
     private Date expiredTime;
+    private String role;
     @Ignore
     private int deletedStatus;
 
@@ -33,6 +34,7 @@ public class RefreshTokenModel extends Table{
         email = user.getEmail();
         username = user.getUsername();
         refreshToken = generateUUIDRefreshToken();
+        role = user.getRole();
         createdTime = new Date();
         expiredTime = getExpirationDate();
         deletedStatus = 0;
