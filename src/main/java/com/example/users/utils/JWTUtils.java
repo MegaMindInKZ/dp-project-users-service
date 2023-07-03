@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.users.entities.RefreshTokenModel;
+import com.example.users.entities.RefreshToken;
 import com.example.users.global.variables.UserGlobalVariable;
 
 import java.util.Calendar;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class JWTUtils {
     private static final String secretKey = "T8A7fsSWfwuEKMJnzzz9CPtF3InJ645hjl02Wc3rNXpTvvPcRY8QcZxEvwZeAjSwdmmEZNwgxYDgDXsKemiqmhUlDUrYPmrvsSsorlCjEdOXX3CyVP1DcDvnpFYh1M8o";
-    public static String createJWTAccessToken(RefreshTokenModel refreshTokenModel) {
+    public static String createJWTAccessToken(RefreshToken refreshTokenModel) {
         Map<String, Object> payload = createPayload(refreshTokenModel);
         try {
             JWTCreator.Builder builder = JWT.create();
@@ -29,7 +29,7 @@ public class JWTUtils {
         }
     }
 
-    private static Map<String, Object> createPayload(RefreshTokenModel refreshTokenModel){
+    private static Map<String, Object> createPayload(RefreshToken refreshTokenModel){
         Map<String, Object> payload = new HashMap<>();
         payload.put("username", refreshTokenModel.getUsername());
         payload.put("email", refreshTokenModel.getEmail());

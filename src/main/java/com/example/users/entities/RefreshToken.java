@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Data
 @Entity
-public class RefreshTokenModel extends Table{
+public class RefreshToken extends Table{
     @Id
     @Ignore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class RefreshTokenModel extends Table{
     @Ignore
     private int deletedStatus;
 
-    public RefreshTokenModel(UserModel user){
+    public RefreshToken(User user){
         this.userID = user.getId();
         email = user.getEmail();
         username = user.getUsername();
@@ -40,7 +40,7 @@ public class RefreshTokenModel extends Table{
         deletedStatus = 0;
     }
 
-    public RefreshTokenModel() {
+    public RefreshToken() {
 
     }
 

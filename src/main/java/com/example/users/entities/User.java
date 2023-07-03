@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Data
 @Entity
-public class UserModel extends Table {
+public class User extends Table {
     @Ignore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

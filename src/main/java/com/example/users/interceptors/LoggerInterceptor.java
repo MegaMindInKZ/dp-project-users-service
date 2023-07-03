@@ -1,4 +1,4 @@
-package com.example.users.components;
+package com.example.users.interceptors;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
