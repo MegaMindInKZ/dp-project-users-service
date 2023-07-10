@@ -29,7 +29,7 @@ public class ClientUserModelRegistrationValidator extends AbstractValidator {
             errors.add("username cannot be null");
         if(user.getUsername().isEmpty())
             errors.add("username length cannot be 0");
-        if(sqlQueryCountAndExists.tableName("user_model").where("username = ?", user.getUsername()).exists())
+        if(sqlQueryCountAndExists.tableName("user").where("username = ?", user.getUsername()).exists())
             errors.add("username has been taken by another user");
         if(errors.isEmpty()) return;
         getErrorMessages().put("username", errors);
@@ -41,7 +41,7 @@ public class ClientUserModelRegistrationValidator extends AbstractValidator {
             errors.add("email cannot be null");
         if(user.getEmail().isEmpty())
             errors.add("email length cannot be 0");
-        if(sqlQueryCountAndExists.tableName("user_model").where("email = ?", user.getEmail()).exists())
+        if(sqlQueryCountAndExists.tableName("user").where("email = ?", user.getEmail()).exists())
             errors.add("email has been taken by another user");
         if(errors.isEmpty()) return;
         getErrorMessages().put("email", errors);
