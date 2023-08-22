@@ -9,7 +9,7 @@ import com.example.users.repositories.RefreshTokenJpa;
 import com.example.users.repositories.UserJpa;
 import com.example.users.sql.SQLQueryCountAndExists;
 import com.example.users.utils.JWTUtils;
-import com.example.users.utils.PasswordEncryption;
+import com.example.users.utils.PasswordUtil;
 import com.example.users.utils.RequestBodyParamsUtils;
 import com.example.users.validators.AbstractValidator;
 import com.example.users.validators.client.ClientUserModelRegistrationValidator;
@@ -40,8 +40,7 @@ public class AuthServiceImpl implements AuthService{
         if(!validator.isValid()){
             return new Response(2, "Validation error!", validator.getErrorMessages());
         }
-        user.setPassword(PasswordEncryption.getHashedPasswordSHA256(user.getPassword()));
-        user.setRole(UserGlobalVariable.clientRole);
+        user.setPassword(PasswordUtil.getHashedPasswordSHA256(user.getPassword()));
         user.setEmailVerified(UserGlobalVariable.EmailNotVerified);
         user.setLastLogin(new Date());
         user.setCreatedTime(new Date());
@@ -58,7 +57,7 @@ public class AuthServiceImpl implements AuthService{
         User user = getUserByUsernameOrEmail(usernameOrEmail);
         if(user == null)
             return new Response(2, "input error!", Map.of("errors", new ArrayList<String>(){{add("username or password is not correct!");}}));
-        if(!check_password(user, password))
+        if(!PasswordUtil.check_password(user, password))
             return new Response(2, "input error!", new ArrayList<String>(){{add("username or password is not correct!");}});
         RefreshToken refreshToken = new RefreshToken(user);
         refreshTokenJpa.save(refreshToken);
@@ -98,12 +97,5 @@ public class AuthServiceImpl implements AuthService{
         }catch (Exception e){}
 
         return user;
-    }
-
-    private boolean check_password(User user, String password) {
-        String userPassword = user.getPassword();
-        String passwordHashSHA256 = PasswordEncryption.getHashedPasswordSHA256(password);
-
-        return passwordHashSHA256.equals(userPassword);
     }
 }

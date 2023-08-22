@@ -1,5 +1,6 @@
 package com.example.users.validators;
 
+import com.example.users.annotations.Ignore;
 import com.example.users.entities.Table;
 import com.example.users.exceptions.ServiceException;
 import com.example.users.utils.RequestBodyParamsUtils;
@@ -46,7 +47,6 @@ public abstract class AbstractValidator<T extends Table> {
     private void parseModel() throws ServiceException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         for(Map.Entry<String, Object> entry: inputParameters.entrySet()){
             String fieldName = entry.getKey();
-            if(fieldName.equals("id")) continue;
             Object value = entry.getValue();
 
             Field field;
@@ -55,6 +55,8 @@ public abstract class AbstractValidator<T extends Table> {
             }catch (Exception ex){
                 continue;
             }
+            if(field.isAnnotationPresent(Ignore.class))
+                continue;
             if (!RequestBodyParamsUtils.isInstance(value, field, model))
                 throw new ServiceException(-1, "mismatched types " + value.getClass().getTypeName() + " and " + field.getType().getName());
 

@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class RefreshToken extends Table{
     @Id
     @Ignore
@@ -38,10 +40,6 @@ public class RefreshToken extends Table{
         createdTime = new Date();
         expiredTime = getExpirationDate();
         deletedStatus = 0;
-    }
-
-    public RefreshToken() {
-
     }
 
     private Date getExpirationDate(){

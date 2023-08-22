@@ -1,11 +1,11 @@
 package com.example.users.utils;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.example.users.entities.User;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class PasswordEncryption {
+public class PasswordUtil {
 
     private static String salt = "be44361a-96c2-4edd-8789-9d0b1593af61";
     public static String getHashedPasswordSHA256(String password)
@@ -25,5 +25,12 @@ public class PasswordEncryption {
             e.printStackTrace();
         }
         return generatedPassword;
+    }
+
+    public static boolean check_password(User user, String password) {
+        String userPassword = user.getPassword();
+        String passwordHashSHA256 = PasswordUtil.getHashedPasswordSHA256(password);
+
+        return passwordHashSHA256.equals(userPassword);
     }
 }
