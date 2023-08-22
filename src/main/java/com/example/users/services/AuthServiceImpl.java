@@ -13,6 +13,7 @@ import com.example.users.utils.PasswordEncryption;
 import com.example.users.utils.RequestBodyParamsUtils;
 import com.example.users.validators.AbstractValidator;
 import com.example.users.validators.client.ClientUserModelRegistrationValidator;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class AuthServiceImpl implements AuthService{
     @Autowired
     RefreshTokenJpa refreshTokenJpa;
     @Override
-    public Response register(Map<String, Object> requestBodyParams, HttpServletResponse response) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, ServiceException, ClassNotFoundException {
+    public Response register(Map<String, Object> requestBodyParams, HttpServletRequest request, HttpServletResponse response) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, ServiceException, ClassNotFoundException {
         User user = new User();
         AbstractValidator<User> validator = new ClientUserModelRegistrationValidator(requestBodyParams, user, queryCountAndExists);
         if(!validator.isValid()){
@@ -50,7 +51,7 @@ public class AuthServiceImpl implements AuthService{
         return new Response(1, "OK", user.getMap());
     }
     @Override
-    public Response login(Map<String, Object> requestBodyParams, HttpServletResponse response) throws ServiceException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public Response login(Map<String, Object> requestBodyParams, HttpServletRequest request,  HttpServletResponse response) throws ServiceException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         String usernameOrEmail = RequestBodyParamsUtils.getString(requestBodyParams, "usernameOrEmail", true, true);
         String password = RequestBodyParamsUtils.getString(requestBodyParams, "password", true, true);
 
@@ -71,7 +72,7 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public Response uploadAccessToken(Map<String, Object> requestBodyParameters, HttpServletResponse response) throws ServiceException {
+    public Response uploadAccessToken(Map<String, Object> requestBodyParameters, HttpServletRequest request,  HttpServletResponse response) throws ServiceException {
         String refreshToken = RequestBodyParamsUtils.getString(requestBodyParameters, "refreshToken", true, true);
 
         RefreshToken refreshTokenModel = refreshTokenJpa.getRefreshTokenModelByRefreshToken(refreshToken);
