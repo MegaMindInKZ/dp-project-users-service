@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public interface AuthService {
-    Response register(Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, ServiceException, NoSuchFieldException, ClassNotFoundException;
-    Response login(Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws ServiceException, InvocationTargetException, NoSuchMethodException, IllegalAccessException;
-    Response uploadAccessToken(Map<String, Object> requestBodyParameters, HttpServletRequest request, HttpServletResponse response) throws ServiceException;
+    Response register(Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response);
+    Response login(Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response);
+    Response uploadAccessToken(Map<String, Object> requestBodyParameters, HttpServletRequest request, HttpServletResponse response);
 }

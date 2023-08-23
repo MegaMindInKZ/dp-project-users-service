@@ -1,6 +1,7 @@
 package com.example.users.entities;
 
 import com.example.users.annotations.Ignore;
+import com.example.users.exceptions.ServiceException;
 import com.example.users.utils.StringUtils;
 
 import java.lang.reflect.Field;
@@ -8,21 +9,25 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public abstract class Table {
-    public Map<String, Object> getMap() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Field[] fields = this.getClass().getDeclaredFields();
-        Map<String, Object> map = new HashMap<>();
+    public Map<String, Object> getMap(){
+        try{
+            Field[] fields = this.getClass().getDeclaredFields();
+            Map<String, Object> map = new HashMap<>();
 
-        for(Field field: fields){
-            String fieldName = field.getName();
+            for (Field field : fields) {
+                String fieldName = field.getName();
 
-            if(isIgnored(field))
-                continue;
+                if (isIgnored(field))
+                    continue;
 
-            String getterMethodName = StringUtils.getGetterMethodNameByFieldName(fieldName);
-            Object val = this.getClass().getMethod(getterMethodName).invoke(this);
-            map.put(fieldName, val);
+                String getterMethodName = StringUtils.getGetterMethodNameByFieldName(fieldName);
+                Object val = this.getClass().getMethod(getterMethodName).invoke(this);
+                map.put(fieldName, val);
+            }
+            return map;
+        }catch (Exception e){
+            throw new ServiceException(e);
         }
-        return map;
     }
 
     public Object getValueByFieldName(String fieldName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {

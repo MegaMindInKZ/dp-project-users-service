@@ -2,6 +2,7 @@ package com.example.users.validators;
 
 import com.example.users.annotations.Ignore;
 import com.example.users.entities.Table;
+import com.example.users.exceptions.BadRequestException;
 import com.example.users.exceptions.ServiceException;
 import com.example.users.utils.RequestBodyParamsUtils;
 import lombok.Data;
@@ -27,24 +28,12 @@ public abstract class AbstractValidator<T extends Table> {
         this.inputParameters = inputParameters;
     }
     public boolean isValid(){
-        try {
-            parseModel();
-        } catch (ServiceException e) {
-            List<String> errorMessageList = new ArrayList<>();
-            errorMessageList.add(e.getMessage());
-            errorMessages.put("type error", errorMessageList);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
+        parseModel();
         check();
         return errorMessages.size() == 0;
     }
 
-    private void parseModel() throws ServiceException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    private void parseModel(){
         for(Map.Entry<String, Object> entry: inputParameters.entrySet()){
             String fieldName = entry.getKey();
             Object value = entry.getValue();
@@ -58,16 +47,16 @@ public abstract class AbstractValidator<T extends Table> {
             if(field.isAnnotationPresent(Ignore.class))
                 continue;
             if (!RequestBodyParamsUtils.isInstance(value, field, model))
-                throw new ServiceException(-1, "mismatched types " + value.getClass().getTypeName() + " and " + field.getType().getName());
+                throw new BadRequestException("mismatched types " + value.getClass().getTypeName() + " and " + field.getType().getName());
 
             try {
                 model.setValueByFieldName(fieldName, value);
             } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
+                throw new ServiceException(e);
             } catch (InvocationTargetException e) {
-                throw new ServiceException(-1, "mismatched types " + value.getClass().getTypeName() + " and " + field.getType().getName());
+                throw new BadRequestException("mismatched types " + value.getClass().getTypeName() + " and " + field.getType().getName());
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new ServiceException(e);
             }
         }
 

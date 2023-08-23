@@ -1,16 +1,15 @@
-package com.example.users.validators.client;
+package com.example.users.validators;
 
 import com.example.users.entities.User;
 import com.example.users.sql.SQLQueryCountAndExists;
-import com.example.users.validators.AbstractValidator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ClientUserModelRegistrationValidator extends AbstractValidator {
+public class UserValidator extends AbstractValidator {
     private SQLQueryCountAndExists sqlQueryCountAndExists;
-    public ClientUserModelRegistrationValidator(Map inputParameters, User model, SQLQueryCountAndExists sqlQueryCountAndExists) throws ClassNotFoundException, NoSuchMethodException {
+    public UserValidator(Map inputParameters, User model, SQLQueryCountAndExists sqlQueryCountAndExists){
         super(inputParameters, model);
         this.sqlQueryCountAndExists = sqlQueryCountAndExists;
 
