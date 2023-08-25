@@ -2,10 +2,11 @@ package com.example.users.exceptions;
 
 import jakarta.servlet.http.HttpServletResponse;
 
-public class ServiceException extends RuntimeException implements CustomException{
+public class ServiceException extends CustomException implements LoggableCustomException{
     private final int HTTPStatus = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+    Exception e;
     public ServiceException(Exception e) {
-        super(e);
+        this.e = e;
     }
     @Override
     public int getHTTPStatus() {
@@ -13,12 +14,7 @@ public class ServiceException extends RuntimeException implements CustomExceptio
     }
 
     @Override
-    public Object getCaution() {
-        return null;
-    }
-
-    @Override
-    public boolean isLoggingError() {
-        return true;
+    public Object loggingMessage() {
+        return e.getStackTrace();
     }
 }

@@ -3,7 +3,7 @@ package com.example.users.exceptions;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
 
-public class BadRequestException extends RuntimeException implements CustomException{
+public class BadRequestException extends CustomException{
     private final int HTTPStatus = HttpServletResponse.SC_BAD_REQUEST;
     private Object errorObject;
     public BadRequestException(Object errorObject) {
@@ -18,10 +18,5 @@ public class BadRequestException extends RuntimeException implements CustomExcep
     @Override
     public Object getCaution() {
         return errorObject;
-    }
-
-    @Override
-    public boolean isLoggingError() {
-        return false;
     }
 }

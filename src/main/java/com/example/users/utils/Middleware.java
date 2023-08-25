@@ -1,10 +1,7 @@
 package com.example.users.utils;
 
 import com.example.users.beans.Response;
-import com.example.users.exceptions.BadRequestException;
-import com.example.users.exceptions.CustomException;
-import com.example.users.exceptions.ForbiddenException;
-import com.example.users.exceptions.ServiceException;
+import com.example.users.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -15,6 +12,7 @@ import java.util.Map;
 public class Middleware {
     public static Response handle(Object service, Map<String, Object> requestBodyParameters, HttpServletRequest request, HttpServletResponse response, String functionName){
         try{
+            response.setStatus(HttpServletResponse.SC_OK);
             Method method = service.getClass().getMethod(functionName, Map.class, HttpServletRequest.class, HttpServletResponse.class);
             return (Response) method.invoke(service, requestBodyParameters, request, response);
         }
@@ -27,7 +25,7 @@ public class Middleware {
         }
     }
     private static Response handleCustomException(CustomException exception, HttpServletResponse response){
-        if(exception.isLoggingError()) {
+        if(exception instanceof LoggableCustomException) {
             //@TODO: logging error
         }
         response.setStatus(exception.getHTTPStatus());
