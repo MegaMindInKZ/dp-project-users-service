@@ -1,6 +1,5 @@
 package com.example.users.services;
 
-import com.example.users.beans.Response;
 import com.example.users.entities.RefreshToken;
 import com.example.users.entities.User;
 import com.example.users.exceptions.BadRequestException;
@@ -33,7 +32,7 @@ public class AuthServiceImpl implements AuthService{
     @Autowired
     RefreshTokenJpa refreshTokenJpa;
     @Override
-    public Response register(Map<String, Object> requestBodyParams, HttpServletRequest request, HttpServletResponse response) {
+    public Object register(Map<String, Object> requestBodyParams, HttpServletRequest request, HttpServletResponse response) {
         User user = new User();
         AbstractValidator<User> validator = new UserValidator(requestBodyParams, user, queryCountAndExists);
         if(!validator.isValid()){
@@ -46,10 +45,10 @@ public class AuthServiceImpl implements AuthService{
 
         userJpa.save(user);
 
-        return new Response(1, "OK", user.getMap());
+        return user.getMap();
     }
     @Override
-    public Response login(Map<String, Object> requestBodyParams, HttpServletRequest request,  HttpServletResponse response){
+    public Object login(Map<String, Object> requestBodyParams, HttpServletRequest request,  HttpServletResponse response){
         String usernameOrEmail = RequestBodyParamsUtils.getString(requestBodyParams, "usernameOrEmail", true, true);
         String password = RequestBodyParamsUtils.getString(requestBodyParams, "password", true, true);
 
@@ -61,25 +60,25 @@ public class AuthServiceImpl implements AuthService{
         RefreshToken refreshToken = new RefreshToken(user);
         refreshTokenJpa.save(refreshToken);
         String accessToken = JWTUtils.createJWTAccessToken(refreshToken);
-        return new Response(1, "OK", Map.of(
+        return Map.of(
             "accessToken", accessToken,
             "uuid", user.getUuid(),
             "refreshToken", refreshToken.getRefreshToken(),
             "user", user.getMap()
-        ));
+        );
     }
 
     @Override
-    public Response uploadAccessToken(Map<String, Object> requestBodyParameters, HttpServletRequest request,  HttpServletResponse response){
+    public Object uploadAccessToken(Map<String, Object> requestBodyParameters, HttpServletRequest request,  HttpServletResponse response){
         String refreshToken = RequestBodyParamsUtils.getString(requestBodyParameters, "refreshToken", true, true);
 
         RefreshToken refreshTokenModel = refreshTokenJpa.getRefreshTokenModelByRefreshToken(refreshToken);
         if(refreshTokenModel == null)
             throw new NotFoundException();
         String accessToken = JWTUtils.createJWTAccessToken(refreshTokenModel);
-        return new Response(1, "OK", Map.of(
+        return Map.of(
                 "accessToken", accessToken
-        ));
+        );
     }
 
     private User getUserByUsernameOrEmail(String usernameOrEmail){
