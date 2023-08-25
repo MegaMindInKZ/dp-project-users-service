@@ -1,6 +1,9 @@
 package com.example.users.utils;
 
 import com.example.users.beans.Response;
+import com.example.users.exceptions.BadRequestException;
+import com.example.users.exceptions.ForbiddenException;
+import com.example.users.exceptions.ServiceException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -13,10 +16,21 @@ public class Middleware {
         try{
             Method method = service.getClass().getMethod(functionName, Map.class, HttpServletRequest.class, HttpServletResponse.class);
             return (Response) method.invoke(service, requestBodyParameters, request, response);
-        }catch (InvocationTargetException e) {
-            return new Response(-2, "Service Exception", e.getMessage());
-        }catch (Exception exception) {
-            return new Response(-3, "Exception", exception.getStackTrace());
+        }catch (ForbiddenException forbiddenException){
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return new Response(-5, "Forbidden", null);
+        }
+        catch (BadRequestException badRequestException){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return new Response(-4, "Bad Request", badRequestException.getErrorObject());
+        }
+        catch (ServiceException serviceException){
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return new Response(-3, "Service Exception", null);
+        }
+        catch (Exception exception) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return new Response(-3, "Service Exception", null);
         }
     }
 }
