@@ -11,8 +11,8 @@ import com.example.users.sql.SQLQueryCountAndExists;
 import com.example.users.utils.JWTUtils;
 import com.example.users.utils.PasswordUtil;
 import com.example.users.utils.RequestBodyParamsUtils;
-import com.example.users.validators.AbstractValidator;
-import com.example.users.validators.UserValidator;
+import com.example.users.validators.create.AbstractCreatorValidator;
+import com.example.users.validators.create.UserCreatorValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public Object register(Map<String, Object> requestBodyParams, HttpServletRequest request, HttpServletResponse response) {
         User user = new User();
-        AbstractValidator<User> validator = new UserValidator(requestBodyParams, user, queryCountAndExists);
+        AbstractCreatorValidator<User> validator = new UserCreatorValidator(requestBodyParams, user, queryCountAndExists);
         if(!validator.isValid()){
             throw new BadRequestException("Validation error!:" + validator.getErrorMessages());
         }

@@ -1,4 +1,4 @@
-package com.example.users.validators;
+package com.example.users.validators.create;
 
 import com.example.users.entities.User;
 import com.example.users.sql.SQLQueryCountAndExists;
@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class UserValidator extends AbstractValidator {
+public class UserCreatorValidator extends AbstractCreatorValidator {
     private SQLQueryCountAndExists sqlQueryCountAndExists;
-    public UserValidator(Map inputParameters, User model, SQLQueryCountAndExists sqlQueryCountAndExists){
+    public UserCreatorValidator(Map inputParameters, User model, SQLQueryCountAndExists sqlQueryCountAndExists){
         super(inputParameters, model);
         this.sqlQueryCountAndExists = sqlQueryCountAndExists;
 

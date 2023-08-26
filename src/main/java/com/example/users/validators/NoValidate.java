@@ -1,10 +1,11 @@
 package com.example.users.validators;
 
 import com.example.users.entities.Table;
+import com.example.users.validators.create.AbstractCreatorValidator;
 
 import java.util.Map;
 
-public class NoValidate<T extends Table> extends AbstractValidator{
+public class NoValidate<T extends Table> extends AbstractCreatorValidator {
 
     public NoValidate() {
     }
