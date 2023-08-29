@@ -1,8 +1,26 @@
 package com.example.users.exceptions;
 
+import com.example.users.exceptions.caution.CautionBehaviour;
+import com.example.users.exceptions.log.LoggableBehaviour;
+
+import java.io.OutputStream;
+
 public abstract class CustomException extends RuntimeException{
-    public abstract int getHTTPStatus();
-    public Object getCaution(){
-        return null;
+    protected int HTTPStatus;
+    LoggableBehaviour loggableBehaviour;
+    CautionBehaviour cautionBehaviour;
+    public int getHTTPStatus(){
+        return HTTPStatus;
     }
+    public Object getCaution(){
+        return cautionBehaviour.getCaution();
+    }
+    public boolean isLoggable(){
+        return loggableBehaviour.isLoggable();
+    }
+
+    public void logMessage(OutputStream outputStream){
+        loggableBehaviour.logMessage(outputStream);
+    }
+
 }

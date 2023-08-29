@@ -13,26 +13,27 @@ import java.util.Map;
 @RestController
 @RequestMapping("/users/public")
 public class PublicController {
-
+    @Autowired
+    private Middleware middleware;
     @Autowired
     private AuthService authService;
 
     @PostMapping("/register")
     @ResponseBody
     public Object register(@RequestBody Map<String, Object> requestParameter, HttpServletRequest request, HttpServletResponse response){
-       return Middleware.handle(authService, requestParameter, request, response, "register");
+       return middleware.handle(authService, requestParameter, request, response, "register");
     }
 
     @PostMapping("/login")
     @ResponseBody
     public Object login(@RequestBody Map<String, Object> requestParameter, HttpServletRequest request,  HttpServletResponse response){
-        return Middleware.handle(authService, requestParameter, request, response, "login");
+        return middleware.handle(authService, requestParameter, request, response, "login");
     }
 
     @PostMapping("/updateAccessToken")
     @ResponseBody
     public Object updateAccessToken(@RequestBody Map<String, Object> requestParameter, HttpServletRequest request,  HttpServletResponse response){
-        return Middleware.handle(authService, requestParameter, request, response, "uploadAccessToken");
+        return middleware.handle(authService, requestParameter, request, response, "uploadAccessToken");
     }
 
 

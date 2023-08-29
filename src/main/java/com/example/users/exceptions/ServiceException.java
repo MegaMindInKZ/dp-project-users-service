@@ -1,20 +1,15 @@
 package com.example.users.exceptions;
 
+import com.example.users.exceptions.caution.NoCautionBehaviour;
+import com.example.users.exceptions.log.Loggable;
+import com.example.users.exceptions.log.LoggableBehaviour;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class ServiceException extends CustomException implements LoggableCustomException{
-    private final int HTTPStatus = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-    Exception e;
+public class ServiceException extends CustomException {
     public ServiceException(Exception e) {
-        this.e = e;
-    }
-    @Override
-    public int getHTTPStatus() {
-        return HTTPStatus;
+        super.loggableBehaviour = new Loggable(e);
+        super.HTTPStatus = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+        super.cautionBehaviour = new NoCautionBehaviour();
     }
 
-    @Override
-    public Object loggingMessage() {
-        return e.getStackTrace();
-    }
 }
