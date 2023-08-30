@@ -30,7 +30,7 @@ public class PublicController {
         return middleware.handle(authService, requestParameter, request, response, "login");
     }
 
-    @PostMapping("/updateAccessToken")
+    @PostMapping("/access-token")
     @ResponseBody
     public Object updateAccessToken(@RequestBody Map<String, Object> requestParameter, HttpServletRequest request,  HttpServletResponse response){
         return middleware.handle(authService, requestParameter, request, response, "uploadAccessToken");

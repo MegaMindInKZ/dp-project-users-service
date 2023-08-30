@@ -1,5 +1,6 @@
-package com.example.users.validators.create;
+package com.example.users.validators;
 
+import com.example.users.entities.Table;
 import com.example.users.entities.User;
 import com.example.users.sql.SQLQueryCountAndExists;
 
@@ -7,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class UserCreatorValidator extends AbstractCreatorValidator {
+public class UserValidator<T extends Table> extends AbstractValidator {
     private SQLQueryCountAndExists sqlQueryCountAndExists;
-    public UserCreatorValidator(Map inputParameters, User model, SQLQueryCountAndExists sqlQueryCountAndExists){
-        super(inputParameters, model);
+    public UserValidator(Map inputParameters, User model, SQLQueryCountAndExists sqlQueryCountAndExists, String... parsingFieldNames){
+        super(inputParameters, model, parsingFieldNames);
         this.sqlQueryCountAndExists = sqlQueryCountAndExists;
 
     }
@@ -26,10 +27,13 @@ public class UserCreatorValidator extends AbstractCreatorValidator {
         List<String> errors = new ArrayList<>();
         if(user.getUsername() == null)
             errors.add("username cannot be null");
-        if(user.getUsername().isEmpty())
-            errors.add("username length cannot be 0");
-        if(sqlQueryCountAndExists.tableName("user").where("username = ?", user.getUsername()).exists())
-            errors.add("username has been taken by another user");
+        else{
+            if (user.getUsername().isEmpty())
+                errors.add("username length cannot be 0");
+            if (sqlQueryCountAndExists.tableName("user").where("username = ?", user.getUsername()).exists())
+                errors.add("username has been taken by another user");
+        }
+
         if(errors.isEmpty()) return;
         getErrorMessages().put("username", errors);
     }
@@ -38,10 +42,13 @@ public class UserCreatorValidator extends AbstractCreatorValidator {
         List<String> errors = new ArrayList<>();
         if(user.getEmail() == null)
             errors.add("email cannot be null");
-        if(user.getEmail().isEmpty())
-            errors.add("email length cannot be 0");
-        if(sqlQueryCountAndExists.tableName("user").where("email = ?", user.getEmail()).exists())
-            errors.add("email has been taken by another user");
+        else {
+            if (user.getEmail().isEmpty())
+                errors.add("email length cannot be 0");
+            if (sqlQueryCountAndExists.tableName("user").where("email = ?", user.getEmail()).exists())
+                errors.add("email has been taken by another user");
+        }
+
         if(errors.isEmpty()) return;
         getErrorMessages().put("email", errors);
     }
@@ -49,9 +56,12 @@ public class UserCreatorValidator extends AbstractCreatorValidator {
         List<String> errors = new ArrayList<>();
         if(user.getPassword() == null)
             errors.add("password cannot be null");
-        if(user.getPassword() != null && user.getPassword().length() < 8)
-            errors.add("password length should be more than 8");
-        if(errors.isEmpty()) return;
+        else{
+            if (user.getPassword() != null && user.getPassword().length() < 8)
+                errors.add("password length should be more than 8");
+        }
+
+        if (errors.isEmpty()) return;
         getErrorMessages().put("password", errors);
     }
 }

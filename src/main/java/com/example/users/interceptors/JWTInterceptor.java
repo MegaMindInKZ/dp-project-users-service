@@ -16,7 +16,7 @@ public class JWTInterceptor implements HandlerInterceptor {
             JWTUtils.verify(token);
             return true;
         }catch (Exception e){
-            response.setStatus(401);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
         return false;
     }

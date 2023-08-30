@@ -8,9 +8,4 @@ public class NotLoggable implements LoggableBehaviour{
     public void logMessage(OutputStream outputStream) {
 
     }
-
-    @Override
-    public boolean isLoggable() {
-        return false;
-    }
 }

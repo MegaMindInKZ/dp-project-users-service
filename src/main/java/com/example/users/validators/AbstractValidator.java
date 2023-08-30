@@ -1,61 +1,69 @@
-package com.example.users.validators.update;
+package com.example.users.validators;
 
+import com.example.users.annotations.Ignore;
 import com.example.users.entities.Table;
 import com.example.users.exceptions.BadRequestException;
 import com.example.users.exceptions.ServiceException;
 import com.example.users.utils.RequestBodyParamsUtils;
-import com.example.users.validators.Validator;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Data
-public abstract class AbstractUpdateValidator<T extends Table> implements Validator {
-    private List<String> ignoringFieldsName = new ArrayList<>();
-    private Map<String, List<String>> errorMessages = new HashMap<>();
-    private Map<String, Object> inputParameters;
-    private boolean isChecked = false;
-    private T model;
-    private List<String> updatingFieldNames;
-
-    protected AbstractUpdateValidator(){}
-
-    protected AbstractUpdateValidator(Map<String, Object> inputParameters, T model, List<String> updatingFieldNames){
+@NoArgsConstructor
+public abstract class AbstractValidator<T extends Table> {
+    protected Map<String, List<String>> errorMessages = new HashMap<>();
+    protected Map<String, Object> inputParameters;
+    protected boolean isChecked = false;
+    protected T model;
+    String[] parsingFieldNames;
+    protected AbstractValidator(Map<String, Object> inputParameters, T model, String... parsingFieldName){
         this.model = model;
         this.inputParameters = inputParameters;
-        this.updatingFieldNames = updatingFieldNames;
+        this.parsingFieldNames = parsingFieldName;
     }
+    protected abstract void check();
     public boolean isValid(){
         if(isChecked){
             return errorMessages.size() == 0;
         }
         parseModel();
+        postCheck();
         check();
+        preCheck();
         isChecked = true;
         return errorMessages.size() == 0;
     }
+    protected void postCheck(){
 
+    }
+    protected void preCheck(){
+
+    }
     private void parseModel(){
-        for(String updatingFieldName: updatingFieldNames){
-            Object value = inputParameters.get(updatingFieldName);
+        for(String parsingFieldName: parsingFieldNames){
+            String fieldName = parsingFieldName;
+            Object value = inputParameters.get(fieldName);
+
+            if(value == null)
+                continue;
 
             Field field;
             try {
-                field = model.getClass().getDeclaredField(updatingFieldName);
+                field = model.getClass().getDeclaredField(fieldName);
             }catch (Exception ex){
-                throw new ServiceException(ex);
+                continue;
             }
-
             if (!RequestBodyParamsUtils.isInstance(value, field, model))
                 throw new BadRequestException("mismatched types " + value.getClass().getTypeName() + " and " + field.getType().getName());
 
             try {
-                model.setValueByFieldName(updatingFieldName, value);
+                model.setValueByFieldName(fieldName, value);
             } catch (NoSuchMethodException e) {
                 throw new ServiceException(e);
             } catch (InvocationTargetException e) {
@@ -63,9 +71,10 @@ public abstract class AbstractUpdateValidator<T extends Table> implements Valida
             } catch (Exception e) {
                 throw new ServiceException(e);
             }
-
         }
-    }
-    protected abstract void check();
 
+    }
+    public Map<String, List<String>> getErrorMessages(){
+        return errorMessages;
+    }
 }

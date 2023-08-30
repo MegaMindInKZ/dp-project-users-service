@@ -15,9 +15,6 @@ public abstract class CustomException extends RuntimeException{
     public Object getCaution(){
         return cautionBehaviour.getCaution();
     }
-    public boolean isLoggable(){
-        return loggableBehaviour.isLoggable();
-    }
 
     public void logMessage(OutputStream outputStream){
         loggableBehaviour.logMessage(outputStream);
