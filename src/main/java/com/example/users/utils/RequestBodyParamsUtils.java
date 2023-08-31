@@ -1,11 +1,10 @@
 package com.example.users.utils;
 
-import com.example.users.entities.Table;
-import com.example.users.exceptions.BadRequestException;
-import com.example.users.exceptions.ServiceException;
+import com.example.users.data.entities.Table;
+import com.example.users.utils.exceptions.BadRequestException;
+import com.example.users.utils.exceptions.ServiceException;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class RequestBodyParamsUtils {

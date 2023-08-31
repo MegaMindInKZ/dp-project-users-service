@@ -1,6 +1,6 @@
 package com.example.users.utils;
 
-import com.example.users.entities.User;
+import com.example.users.data.entities.User;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

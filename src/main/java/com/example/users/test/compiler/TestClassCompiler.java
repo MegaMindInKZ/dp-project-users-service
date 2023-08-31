@@ -1,6 +1,6 @@
 package com.example.users.test.compiler;
 
-import com.example.users.exceptions.BadRequestException;
+import com.example.users.utils.exceptions.BadRequestException;
 import com.example.users.test.annotations.AfterTestClass;
 import com.example.users.test.annotations.BeforeTestClass;
 import com.example.users.test.bean.TestClassBean;

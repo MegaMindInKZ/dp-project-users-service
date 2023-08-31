@@ -1,7 +1,6 @@
 package com.example.users.utils;
 
-import com.example.users.exceptions.*;
-import com.example.users.exceptions.log.LoggableBehaviour;
+import com.example.users.utils.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;

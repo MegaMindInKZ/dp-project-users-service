@@ -1,6 +1,6 @@
 package com.example.users.test.utils;
 
-import com.example.users.exceptions.ServiceException;
+import com.example.users.utils.exceptions.ServiceException;
 import com.example.users.test.annotations.Test;
 import com.example.users.test.bean.TestAbstractBean;
 import com.example.users.test.bean.TestClassBean;
