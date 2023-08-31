@@ -24,7 +24,6 @@ public class AuthService {
 
     @Autowired
     private UserJpa userJpa;
-
     @Autowired
     private SQLQueryCountAndExists queryCountAndExists;
 
