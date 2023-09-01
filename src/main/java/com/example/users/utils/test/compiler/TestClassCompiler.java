@@ -3,7 +3,7 @@ package com.example.users.utils.test.compiler;
 import com.example.users.utils.test.annotations.AfterTestClass;
 import com.example.users.utils.test.annotations.BeforeTestClass;
 import com.example.users.utils.test.utils.ScanProjectUtil;
-import com.example.users.utils.test.utils.TestResult;
+import com.example.users.utils.test.bean.result.TestResult;
 import lombok.Data;
 
 import java.lang.reflect.Method;

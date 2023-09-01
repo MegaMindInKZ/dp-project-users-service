@@ -1,7 +1,7 @@
 package com.example.users.utils.test.compiler;
 
-import com.example.users.utils.test.utils.TestResult;
-import com.example.users.utils.test.utils.TestTaskResult;
+import com.example.users.utils.test.bean.result.TestResult;
+import com.example.users.utils.test.bean.result.TestTaskResult;
 
 import java.util.List;
 

@@ -5,6 +5,9 @@ import com.example.users.utils.test.annotations.Test;
 import com.example.users.utils.test.bean.AbstractTestBean;
 import com.example.users.utils.test.bean.TestClassBean;
 import com.example.users.utils.test.bean.TestMethodBean;
+import com.example.users.utils.test.bean.result.TestBeanResult;
+import com.example.users.utils.test.bean.result.TestErrorResult;
+import com.example.users.utils.test.bean.result.TestResult;
 import com.example.users.utils.test.compiler.TestMethodCompiler;
 
 import java.lang.reflect.Method;
@@ -59,7 +62,7 @@ public class ScanProjectUtil {
             method.invoke(object);
             testResult.setSuccessful(true);
         }catch (Exception e){
-            testResult.setData(e);
+            testResult.setData(new TestErrorResult(e, method));
         }
         long end = System.currentTimeMillis();
 
@@ -71,11 +74,7 @@ public class ScanProjectUtil {
         TestMethodCompiler methodCompiler = new TestMethodCompiler();
         methodCompiler.setMethod(method);
         methodCompiler.setObject(object);
-        TestResult testResult = null;
-        try{
-            testResult = methodCompiler.invoke();
-        }catch (Exception e){
-        }
+        TestResult testResult = methodCompiler.invoke();
 
         return testResult;
     }

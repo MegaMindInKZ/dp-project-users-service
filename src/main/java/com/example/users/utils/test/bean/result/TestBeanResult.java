@@ -1,4 +1,4 @@
-package com.example.users.utils.test.utils;
+package com.example.users.utils.test.bean.result;
 
 import lombok.Data;
 

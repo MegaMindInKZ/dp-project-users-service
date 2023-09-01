@@ -1,6 +1,7 @@
 package com.example.users.utils.test.controller;
 
 import com.example.users.utils.test.annotations.*;
+import com.example.users.utils.test.exceptions.NotPassedException;
 
 @Test
 public class TestPublicController {
@@ -23,6 +24,7 @@ public class TestPublicController {
     @Test
     public void test1(){
         System.out.println("test1");
+        throw new NotPassedException();
     }
 
     @Test

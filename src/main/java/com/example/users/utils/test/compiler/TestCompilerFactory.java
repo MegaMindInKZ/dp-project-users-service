@@ -3,7 +3,7 @@ package com.example.users.utils.test.compiler;
 import com.example.users.utils.test.annotations.Test;
 import com.example.users.utils.test.bean.AbstractTestBean;
 import com.example.users.utils.test.utils.ScanProjectUtil;
-import com.example.users.utils.test.utils.TestTaskResult;
+import com.example.users.utils.test.bean.result.TestTaskResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
