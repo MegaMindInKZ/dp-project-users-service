@@ -1,59 +1,41 @@
 package com.example.users.utils.test.controller;
 
+import com.example.users.components.controllers.PublicController;
+import com.example.users.data.entities.User;
+import com.example.users.data.repositories.UserJpa;
 import com.example.users.utils.test.annotations.*;
-import com.example.users.utils.test.exceptions.NotPassedException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Test
 public class TestPublicController {
+    @Autowired
+    private PublicController publicController;
+    @Autowired
+    private UserJpa userJpa;
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    private User user;
+
     @BeforeTestClass
-    public void beforeTestClass1(){
-        System.out.println("beforeTestClass1");
-    }
-    @BeforeTestClass
-    public void beforeTestClass2(){
-        System.out.println("beforeTestClass2");
-    }
-    @BeforeTest
-    public void beforeTest1(){
-        System.out.println("beforeTest1");
-    }
-    @BeforeTest
-    public void beforeTest2(){
-        System.out.println("beforeTest2");
-    }
-    @Test
-    public void test1(){
-        System.out.println("test1");
-        throw new NotPassedException();
+    public void createUser(){
+        user = new User();
+        user.setUsername("123456789");
+        user.setPassword("kazsadfakh");
+        user.setFullname("Kazakh");
+
+
+
+        Map<String, Object> parameters = objectMapper.convertValue(user, Map.class);
+        publicController.register(parameters, null, null);
     }
 
-    @Test
-    public void test2(){
-        System.out.println("test2");
-    }
-
-    @Test
-    public void test3(){
-        System.out.println("test3");
-    }
-    @AfterTest
-    public void afterTest1(){
-        System.out.println("afterTest1");
-    }
-    @AfterTest
-    public void afterTest2(){
-        System.out.println("afterTest2");
-    }
     @AfterTestClass
-    public void afterTestClass1(){
-        System.out.println("afterTestClass1");
-    }
-    @AfterTestClass
-    public void afterTestClass2(){
-        System.out.println("afterTestClass2");
-    }
-    @Test
-    public void duman(){
-        System.out.println("duman");
+    public void deleteUser(){
+        userJpa.delete(user);
     }
 }
