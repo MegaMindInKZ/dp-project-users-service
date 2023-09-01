@@ -1,6 +1,5 @@
 package com.example.users.utils.test.compiler;
 
-import com.example.users.utils.test.bean.TestAbstractBean;
 import com.example.users.utils.test.utils.TestResult;
 import com.example.users.utils.test.utils.TestTaskResult;
 
@@ -15,6 +14,7 @@ public abstract class AbstractTestCompiler {
 
     public TestTaskResult invoke(){
         TestTaskResult result = new TestTaskResult();
+        result.setName(object.getClass().getSimpleName());
         result.setBeforeTestResult(beforeTest());
         result.setTestResult(test());
         result.setAfterTestResult(afterTest());
