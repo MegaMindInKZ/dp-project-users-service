@@ -1,6 +1,6 @@
 package com.example.users.components.services;
 
-import com.example.users.test.components.TestComponent;
+import com.example.users.utils.test.components.TestComponent;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,5 +14,9 @@ public class TestService {
     private TestComponent testComponent;
     public Object list(Map<String, Object> requestBodyParams, HttpServletRequest request, HttpServletResponse response){
         return testComponent.getTestNameString();
+    }
+
+    public Object invoke(Map<String, Object> requestBodyParams, HttpServletRequest request, HttpServletResponse response){
+        return testComponent.invoke(requestBodyParams);
     }
 }

@@ -22,4 +22,10 @@ public class TestController {
     public Object list(@RequestBody Map<String, Object> parameters, HttpServletResponse response, HttpServletRequest request){
         return middleware.handle(testService, parameters, request, response, "list");
     }
+
+    @PostMapping("/invoke")
+    @ResponseBody
+    public Object invoke(@RequestBody Map<String, Object> parameters, HttpServletResponse response, HttpServletRequest request){
+        return middleware.handle(testService, parameters, request, response, "invoke");
+    }
 }

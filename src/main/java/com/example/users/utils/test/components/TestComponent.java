@@ -1,8 +1,11 @@
-package com.example.users.test.components;
+package com.example.users.utils.test.components;
 
-import com.example.users.test.annotations.Test;
-import com.example.users.test.bean.TestAbstractBean;
-import com.example.users.test.utils.ScanProjectUtil;
+import com.example.users.utils.RequestBodyParamsUtils;
+import com.example.users.utils.exceptions.NotFoundException;
+import com.example.users.utils.test.annotations.Test;
+import com.example.users.utils.test.bean.TestAbstractBean;
+import com.example.users.utils.test.compiler.TestCompilerFactory;
+import com.example.users.utils.test.utils.ScanProjectUtil;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -11,11 +14,14 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class TestComponent {
     @Autowired
     private ConfigurableApplicationContext applicationContext;
+    @Autowired
+    private TestCompilerFactory compilerFactory;
     private List<TestAbstractBean> testBeans;
 
     @PostConstruct
@@ -26,11 +32,13 @@ public class TestComponent {
             Object bean = applicationContext.getBean(beanName);
             Class<?> clazz = bean.getClass();
             TestAbstractBean classTestBean = ScanProjectUtil.getTextBean(clazz);
+            classTestBean.setBeanName(beanName);
             testBeans.add(classTestBean);
             Method[] methods = clazz.getDeclaredMethods();
             for(Method method: methods){
                 if(method.isAnnotationPresent(Test.class)){
                     TestAbstractBean methodTestBean = ScanProjectUtil.getTextBean(method);
+                    methodTestBean.setBeanName(beanName);
                     testBeans.add(methodTestBean);
                 }
             }
@@ -39,5 +47,21 @@ public class TestComponent {
 
     public List<TestAbstractBean> getTestNameString(){
         return testBeans;
+    }
+
+    public Object invoke(Map<String, Object> params){
+        String uuid = RequestBodyParamsUtils.getString(params, "uuid", true, true);
+        TestAbstractBean testBean = null;
+        for(TestAbstractBean bean: testBeans){
+            if(bean.getUuid().equals(uuid)){
+                testBean = bean;
+                break;
+            }
+        }
+        if(testBean == null)
+            throw new NotFoundException();
+
+
+        return compilerFactory.invoke(testBean);
     }
 }

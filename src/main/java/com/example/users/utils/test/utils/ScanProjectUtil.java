@@ -1,10 +1,10 @@
-package com.example.users.test.utils;
+package com.example.users.utils.test.utils;
 
 import com.example.users.utils.exceptions.ServiceException;
-import com.example.users.test.annotations.Test;
-import com.example.users.test.bean.TestAbstractBean;
-import com.example.users.test.bean.TestClassBean;
-import com.example.users.test.bean.TestMethodBean;
+import com.example.users.utils.test.annotations.Test;
+import com.example.users.utils.test.bean.TestAbstractBean;
+import com.example.users.utils.test.bean.TestClassBean;
+import com.example.users.utils.test.bean.TestMethodBean;
 
 import java.lang.reflect.Method;
 import java.util.UUID;
@@ -29,11 +29,9 @@ public class ScanProjectUtil {
     }
     private static TestAbstractBean parse(Method method){
         TestMethodBean testMethodBean = new TestMethodBean();
-        String className = method.getDeclaringClass().getSimpleName();
         String definition = method.getAnnotation(Test.class).definition();
 
         testMethodBean.setDefinition(definition);
-        testMethodBean.setClassName(className);
         testMethodBean.setType(METHOD_TEST_BEAN_TYPE);
         testMethodBean.setKey(method.getName());
 
