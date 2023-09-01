@@ -5,6 +5,7 @@ import com.example.users.utils.test.annotations.Test;
 import com.example.users.utils.test.bean.TestAbstractBean;
 import com.example.users.utils.test.bean.TestClassBean;
 import com.example.users.utils.test.bean.TestMethodBean;
+import com.example.users.utils.test.compiler.TestMethodCompiler;
 
 import java.lang.reflect.Method;
 import java.util.UUID;
@@ -47,5 +48,40 @@ public class ScanProjectUtil {
         testClassBean.setKey(clazz.getSimpleName());
 
         return testClassBean;
+    }
+
+    public static TestBeanResult getMethodBeanResult(Method method, Object object){
+        TestBeanResult testResult = new TestBeanResult();
+
+        long start = System.currentTimeMillis();
+        try{
+            method.invoke(object);
+            testResult.setSuccessful(true);
+        }catch (Exception e){
+            testResult.setData(e);
+        }
+        long end = System.currentTimeMillis();
+
+        testResult.setPeriodMillisecond(end - start);
+        return testResult;
+    }
+
+    public static TestResult getClassBeanResult(Method method, Object object){
+        TestBeanResult testResult = new TestBeanResult();
+        TestMethodCompiler methodCompiler = new TestMethodCompiler();
+        methodCompiler.setMethod(method);
+        methodCompiler.setObject(object);
+
+        long start = System.currentTimeMillis();
+        try{
+            methodCompiler.invoke();
+            testResult.setSuccessful(true);
+        }catch (Exception e){
+            testResult.setData(e);
+        }
+        long end = System.currentTimeMillis();
+
+        testResult.setPeriodMillisecond(end - start);
+        return testResult;
     }
 }

@@ -1,33 +1,24 @@
 package com.example.users.utils.test.compiler;
 
 import com.example.users.utils.test.bean.TestAbstractBean;
-import org.springframework.context.ConfigurableApplicationContext;
+import com.example.users.utils.test.utils.TestResult;
+import com.example.users.utils.test.utils.TestTaskResult;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 public abstract class AbstractTestCompiler {
-    protected TestAbstractBean testBean;
     protected Object object;
 
-    protected abstract Object test() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException;
-    protected abstract void beforeTest() throws InvocationTargetException, IllegalAccessException;
-    protected abstract void afterTest() throws InvocationTargetException, IllegalAccessException;
+    protected abstract Object test();
+    protected abstract List<TestResult> beforeTest();
+    protected abstract List<TestResult> afterTest();
 
-    public Object invoke(){
-        Object result = null;
-        try{
-            beforeTest();
-            result = test();
-            afterTest();
-        }catch (InvocationTargetException targetException){
-            targetException.printStackTrace();
-        }catch (Exception ignored){
-            ignored.printStackTrace();
-        }
+    public TestTaskResult invoke(){
+        TestTaskResult result = new TestTaskResult();
+        result.setBeforeTestResult(beforeTest());
+        result.setTestResult(test());
+        result.setAfterTestResult(afterTest());
         return result;
-    }
-    public void setTestBean(TestAbstractBean testBean) {
-        this.testBean = testBean;
     }
     public void setObject(Object object) {
         this.object = object;

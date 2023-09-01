@@ -6,6 +6,7 @@ import com.example.users.utils.test.annotations.Test;
 import com.example.users.utils.test.bean.TestAbstractBean;
 import com.example.users.utils.test.compiler.TestCompilerFactory;
 import com.example.users.utils.test.utils.ScanProjectUtil;
+import com.example.users.utils.test.utils.TestTaskResult;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -49,7 +50,7 @@ public class TestComponent {
         return testBeans;
     }
 
-    public Object invoke(Map<String, Object> params){
+    public TestTaskResult invoke(Map<String, Object> params){
         String uuid = RequestBodyParamsUtils.getString(params, "uuid", true, true);
         TestAbstractBean testBean = null;
         for(TestAbstractBean bean: testBeans){

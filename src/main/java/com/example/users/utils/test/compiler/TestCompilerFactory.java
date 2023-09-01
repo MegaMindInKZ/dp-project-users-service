@@ -2,8 +2,8 @@ package com.example.users.utils.test.compiler;
 
 import com.example.users.utils.test.annotations.Test;
 import com.example.users.utils.test.bean.TestAbstractBean;
-import com.example.users.utils.test.bean.TestMethodBean;
 import com.example.users.utils.test.utils.ScanProjectUtil;
+import com.example.users.utils.test.utils.TestTaskResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ public class TestCompilerFactory {
     @Autowired
     private ConfigurableApplicationContext applicationContext;
 
-    public Object invoke(TestAbstractBean testAbstractBean){
+    public TestTaskResult invoke(TestAbstractBean testAbstractBean){
         TestClassCompiler compiler = new TestClassCompiler();
         List<Method> methods = new ArrayList<>();
         Object clazz = applicationContext.getBean(testAbstractBean.getBeanName());
@@ -36,7 +36,6 @@ public class TestCompilerFactory {
             }
         }
         compiler.setObject(clazz);
-        compiler.setTestBean(testAbstractBean);
         compiler.setMethods(methods);
 
         return compiler.invoke();

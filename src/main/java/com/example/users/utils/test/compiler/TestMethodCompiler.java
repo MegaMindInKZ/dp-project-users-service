@@ -1,39 +1,46 @@
 package com.example.users.utils.test.compiler;
 
-import com.example.users.utils.exceptions.BadRequestException;
 import com.example.users.utils.test.annotations.AfterTest;
 import com.example.users.utils.test.annotations.BeforeTest;
-import com.example.users.utils.test.bean.TestMethodBean;
 import com.example.users.utils.test.utils.ScanProjectUtil;
+import com.example.users.utils.test.utils.TestResult;
 import lombok.Data;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class TestMethodCompiler extends AbstractTestCompiler {
     Method method;
     @Override
-    protected Object test() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        method.invoke(object);
-        return null;
+    protected Object test(){
+        return ScanProjectUtil.getMethodBeanResult(method, object);
     }
 
     @Override
-    protected void beforeTest() throws InvocationTargetException, IllegalAccessException {
+    protected List<TestResult> beforeTest(){
         Method[] methods = object.getClass().getDeclaredMethods();
+        List<TestResult> result = new ArrayList<>();
+
         for(Method method: methods){
-            if(method.isAnnotationPresent(BeforeTest.class))
-                method.invoke(object);
+            if(method.isAnnotationPresent(BeforeTest.class)) {
+                result.add(ScanProjectUtil.getMethodBeanResult(method, object));
+            }
         }
+        return result;
     }
 
     @Override
-    protected void afterTest() throws InvocationTargetException, IllegalAccessException {
+    protected List<TestResult> afterTest(){
         Method[] methods = object.getClass().getDeclaredMethods();
+        List<TestResult> result = new ArrayList<>();
+
         for(Method method: methods){
-            if(method.isAnnotationPresent(AfterTest.class))
-                method.invoke(object);
+            if(method.isAnnotationPresent(AfterTest.class)) {
+                result.add(ScanProjectUtil.getMethodBeanResult(method, object));
+            }
         }
+        return result;
     }
 }
