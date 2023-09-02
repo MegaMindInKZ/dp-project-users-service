@@ -2,9 +2,7 @@ package com.example.users.utils.test.utils;
 
 import com.example.users.utils.exceptions.ServiceException;
 import com.example.users.utils.test.annotations.Test;
-import com.example.users.utils.test.bean.AbstractTestBean;
-import com.example.users.utils.test.bean.TestClassBean;
-import com.example.users.utils.test.bean.TestMethodBean;
+import com.example.users.utils.test.bean.TestBean;
 import com.example.users.utils.test.bean.result.TestBeanResult;
 import com.example.users.utils.test.bean.result.TestErrorResult;
 import com.example.users.utils.test.bean.result.TestResult;
@@ -16,8 +14,8 @@ import java.util.UUID;
 public class ScanProjectUtil {
     public static final String CLASS_TEST_BEAN_TYPE = "class";
     public static final String METHOD_TEST_BEAN_TYPE = "method";
-    public static AbstractTestBean getTextBean(Object bean){
-        AbstractTestBean testBean;
+    public static TestBean getTextBean(Object bean){
+        TestBean testBean;
         String uuid = UUID.randomUUID().toString();
         if(bean instanceof Class<?>){
             Class<?> clazz = (Class<?>) bean;
@@ -31,8 +29,8 @@ public class ScanProjectUtil {
         testBean.setUuid(uuid);
         return testBean;
     }
-    private static AbstractTestBean parse(Method method){
-        TestMethodBean testMethodBean = new TestMethodBean();
+    private static TestBean parse(Method method){
+        TestBean testMethodBean = new TestBean();
         String definition = method.getAnnotation(Test.class).definition();
 
         testMethodBean.setDefinition(definition);
@@ -42,8 +40,8 @@ public class ScanProjectUtil {
         return testMethodBean;
     }
 
-    private static AbstractTestBean parse(Class<?> clazz){
-        TestClassBean testClassBean = new TestClassBean();
+    private static TestBean parse(Class<?> clazz){
+        TestBean testClassBean = new TestBean();
         String definition = clazz.getAnnotation(Test.class).definition();
 
         testClassBean.setDefinition(definition);

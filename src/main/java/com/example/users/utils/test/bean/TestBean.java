@@ -2,7 +2,7 @@ package com.example.users.utils.test.bean;
 
 import lombok.Data;
 @Data
-public abstract class AbstractTestBean {
+public class TestBean {
     private String uuid;
     private String definition;
     private String key;

@@ -3,7 +3,7 @@ package com.example.users.utils.test.components;
 import com.example.users.utils.RequestBodyParamsUtils;
 import com.example.users.utils.exceptions.NotFoundException;
 import com.example.users.utils.test.annotations.Test;
-import com.example.users.utils.test.bean.AbstractTestBean;
+import com.example.users.utils.test.bean.TestBean;
 import com.example.users.utils.test.compiler.TestCompilerFactory;
 import com.example.users.utils.test.utils.ScanProjectUtil;
 import com.example.users.utils.test.bean.result.TestTaskResult;
@@ -23,7 +23,7 @@ public class TestComponent {
     private ConfigurableApplicationContext applicationContext;
     @Autowired
     private TestCompilerFactory compilerFactory;
-    private List<AbstractTestBean> testBeans;
+    private List<TestBean> testBeans;
 
     @PostConstruct
     public void init(){
@@ -32,13 +32,13 @@ public class TestComponent {
         for(String beanName: beanNamesForAnnotation){
             Object bean = applicationContext.getBean(beanName);
             Class<?> clazz = bean.getClass();
-            AbstractTestBean classTestBean = ScanProjectUtil.getTextBean(clazz);
+            TestBean classTestBean = ScanProjectUtil.getTextBean(clazz);
             classTestBean.setBeanName(beanName);
             testBeans.add(classTestBean);
             Method[] methods = clazz.getDeclaredMethods();
             for(Method method: methods){
                 if(method.isAnnotationPresent(Test.class)){
-                    AbstractTestBean methodTestBean = ScanProjectUtil.getTextBean(method);
+                    TestBean methodTestBean = ScanProjectUtil.getTextBean(method);
                     methodTestBean.setBeanName(beanName);
                     testBeans.add(methodTestBean);
                 }
@@ -46,14 +46,14 @@ public class TestComponent {
         }
     }
 
-    public List<AbstractTestBean> getTestNameString(){
+    public List<TestBean> getTestNameString(){
         return testBeans;
     }
 
     public TestTaskResult invoke(Map<String, Object> params){
         String uuid = RequestBodyParamsUtils.getString(params, "uuid", true, true);
-        AbstractTestBean testBean = null;
-        for(AbstractTestBean bean: testBeans){
+        TestBean testBean = null;
+        for(TestBean bean: testBeans){
             if(bean.getUuid().equals(uuid)){
                 testBean = bean;
                 break;
