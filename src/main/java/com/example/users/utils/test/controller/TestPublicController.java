@@ -3,9 +3,15 @@ package com.example.users.utils.test.controller;
 import com.example.users.components.controllers.PublicController;
 import com.example.users.data.entities.User;
 import com.example.users.data.repositories.UserJpa;
+import com.example.users.utils.http.request.Request;
+import com.example.users.utils.http.request.RequestFactory;
+import com.example.users.utils.http.response.Response;
 import com.example.users.utils.test.annotations.*;
+import com.example.users.utils.test.exceptions.NotPassedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -17,21 +23,41 @@ public class TestPublicController {
     private PublicController publicController;
     @Autowired
     private UserJpa userJpa;
+    @Autowired
+    private RequestFactory requestFactory;
+    private final String requestCommonURIPath = "/users/public";
     ObjectMapper objectMapper = new ObjectMapper();
 
     private User user;
 
     @BeforeTestClass
     public void createUser(){
+        System.out.println("before");
+    }
+
+    @Test
+    public void register(){
         user = new User();
-        user.setUsername("123456789");
-        user.setPassword("kazsadfakh");
+        user.setUsername("123456789d");
+        user.setPassword("kazsadfakh1");
         user.setFullname("Kazakh");
 
+        System.out.println("test");
 
+        Request request = new Request();
+        request.setMethod(Request.postMethod);
+        request.setContentType("application/json");
+        request.setUriPath(requestCommonURIPath + "/register");
 
-        Map<String, Object> parameters = objectMapper.convertValue(user, Map.class);
-        publicController.register(parameters, null, null);
+        request.setContent(user);
+
+        Response response = null;
+        try {
+            response = requestFactory.request(request);
+        }catch (Exception e){
+        }
+        if(response.getResult_code() != HttpServletResponse.SC_BAD_REQUEST)
+            throw new NotPassedException();
     }
 
     @AfterTestClass

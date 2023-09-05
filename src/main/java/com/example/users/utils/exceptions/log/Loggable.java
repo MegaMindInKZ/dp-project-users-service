@@ -9,23 +9,9 @@ public class Loggable implements LoggableBehaviour{
     public Loggable(Object object){
         this.loggingMessage = object;
     }
+
     @Override
-    public void logMessage(OutputStream outputStream) {
-        try {
-            if(loggingMessage instanceof Exception){
-                Exception e = (Exception) loggingMessage;
-                PrintWriter printWriter = new PrintWriter(outputStream);
-                try
-                {
-                    e.printStackTrace(printWriter);
-                } finally
-                {
-                    printWriter.close();
-                }
-                return;
-            }
-            outputStream.write(loggingMessage.toString().getBytes());
-        } catch (IOException e) {
-        }
+    public Object getLog() {
+        return loggingMessage;
     }
 }
