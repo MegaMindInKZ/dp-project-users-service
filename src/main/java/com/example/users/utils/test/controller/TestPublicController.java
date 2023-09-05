@@ -1,11 +1,11 @@
 package com.example.users.utils.test.controller;
 
+import com.example.users.beans.Response;
 import com.example.users.components.controllers.PublicController;
 import com.example.users.data.entities.User;
 import com.example.users.data.repositories.UserJpa;
 import com.example.users.utils.http.request.Request;
 import com.example.users.utils.http.request.RequestFactory;
-import com.example.users.utils.http.response.Response;
 import com.example.users.utils.test.annotations.*;
 import com.example.users.utils.test.exceptions.NotPassedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,7 +56,9 @@ public class TestPublicController {
             response = requestFactory.request(request);
         }catch (Exception e){
         }
-        if(response.getResult_code() != HttpServletResponse.SC_BAD_REQUEST)
+        if(response.getStatusCode() != HttpServletResponse.SC_BAD_REQUEST)
+            throw new NotPassedException();
+        if(!response.getResult().toString().contains("sd"))
             throw new NotPassedException();
     }
 

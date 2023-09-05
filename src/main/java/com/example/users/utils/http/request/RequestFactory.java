@@ -29,7 +29,7 @@ public class RequestFactory {
     private final int timeoutSeconds = 4;
     @Value("${server.port}")
     private int serverPort;
-    public Response request(Request request) throws IOException {
+    public com.example.users.beans.Response request(Request request) throws IOException {
         URL url = new URL("http://localhost:" + serverPort + request.getUriPath());
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -60,7 +60,7 @@ public class RequestFactory {
             response.setContent(responseBuilder.toString());
         }catch (Exception e){
         }
-        return response;
+        return response.getResponse();
     }
 
     private HttpUriRequest convertToHttpUriRequest(Request request) throws UnsupportedEncodingException, JsonProcessingException {

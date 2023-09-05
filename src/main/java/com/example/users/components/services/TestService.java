@@ -1,5 +1,6 @@
 package com.example.users.components.services;
 
+import com.example.users.beans.Response;
 import com.example.users.utils.test.components.TestComponent;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,11 +13,11 @@ import java.util.Map;
 public class TestService {
     @Autowired
     private TestComponent testComponent;
-    public Object list(Map<String, Object> requestBodyParams, HttpServletRequest request, HttpServletResponse response){
-        return testComponent.getTestNameString();
+    public Response list(Map<String, Object> requestBodyParams, HttpServletRequest request, HttpServletResponse response){
+        return Response.createSuccessResponse(testComponent.getTestNameString());
     }
 
-    public Object invoke(Map<String, Object> requestBodyParams, HttpServletRequest request, HttpServletResponse response){
-        return testComponent.invoke(requestBodyParams);
+    public Response invoke(Map<String, Object> requestBodyParams, HttpServletRequest request, HttpServletResponse response){
+        return Response.createSuccessResponse(testComponent.invoke(requestBodyParams));
     }
 }
