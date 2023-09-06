@@ -21,9 +21,8 @@ public class RequestFactory {
         try {
             return request(request);
         }catch (Exception ignored){
-
+            throw new RuntimeException(ignored);
         }
-        return null;
     }
 
     public Response postRequest(Request request){
@@ -31,9 +30,8 @@ public class RequestFactory {
         try {
             return request(request);
         }catch (Exception ignored){
-
+            throw new RuntimeException(ignored);
         }
-        return null;
     }
     private Response request(Request request) throws IOException {
         final int timeoutSeconds = 4;
@@ -46,8 +44,8 @@ public class RequestFactory {
         connection.setRequestProperty("Content-Type", request.getContentType());
         connection.setRequestProperty("Accept", "application/json");
         connection.setDoOutput(true);
-        connection.setReadTimeout(timeoutSeconds);
-        connection.setConnectTimeout(timeoutSeconds);
+        connection.setReadTimeout(timeoutSeconds * 1000);
+        connection.setConnectTimeout(timeoutSeconds * 1000);
 
         String json = new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(request.getContent());
 

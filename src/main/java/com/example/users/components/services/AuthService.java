@@ -8,7 +8,6 @@ import com.example.users.utils.exceptions.NotFoundException;
 import com.example.users.utils.global.variables.UserGlobalVariable;
 import com.example.users.data.repositories.RefreshTokenJpa;
 import com.example.users.data.repositories.UserJpa;
-import com.example.users.data.sql.SQLQueryCountAndExists;
 import com.example.users.utils.JWTUtils;
 import com.example.users.utils.PasswordUtil;
 import com.example.users.utils.RequestBodyParamsUtils;
@@ -25,14 +24,12 @@ public class AuthService {
 
     @Autowired
     private UserJpa userJpa;
-    @Autowired
-    private SQLQueryCountAndExists queryCountAndExists;
 
     @Autowired
     private RefreshTokenJpa refreshTokenJpa;
     public Response register(Map<String, Object> requestBodyParams, HttpServletRequest request, HttpServletResponse response) {
         User user = new User();
-        UserValidator<User> validator = new UserValidator(requestBodyParams, user, queryCountAndExists, "password", "email", "username");
+        UserValidator<User> validator = new UserValidator(requestBodyParams, user, userJpa, "password", "email", "username");
         if(!validator.isValid()){
             throw new BadRequestException(validator.getErrorMessages());
         }

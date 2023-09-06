@@ -2,17 +2,17 @@ package com.example.users.utils.validators;
 
 import com.example.users.data.entities.Table;
 import com.example.users.data.entities.User;
-import com.example.users.data.sql.SQLQueryCountAndExists;
+import com.example.users.data.repositories.UserJpa;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class UserValidator<T extends Table> extends AbstractValidator {
-    private SQLQueryCountAndExists sqlQueryCountAndExists;
-    public UserValidator(Map inputParameters, User model, SQLQueryCountAndExists sqlQueryCountAndExists, String... parsingFieldNames){
+    private UserJpa userJpa;
+    public UserValidator(Map inputParameters, User model, UserJpa userJpa, String... parsingFieldNames){
         super(inputParameters, model, parsingFieldNames);
-        this.sqlQueryCountAndExists = sqlQueryCountAndExists;
+        this.userJpa = userJpa;
 
     }
     @Override
@@ -30,7 +30,7 @@ public class UserValidator<T extends Table> extends AbstractValidator {
         else{
             if (user.getUsername().isEmpty())
                 errors.add("username length cannot be 0");
-            if (sqlQueryCountAndExists.tableName("user").where("username = ?", user.getUsername()).exists())
+            if (userJpa.getUserModelByUsername(user.getUsername()) != null)
                 errors.add("username has been taken by another user");
         }
 
@@ -45,7 +45,7 @@ public class UserValidator<T extends Table> extends AbstractValidator {
         else {
             if (user.getEmail().isEmpty())
                 errors.add("email length cannot be 0");
-            if (sqlQueryCountAndExists.tableName("user").where("email = ?", user.getEmail()).exists())
+            if (userJpa.getUserModelByEmail(user.getEmail()) != null)
                 errors.add("email has been taken by another user");
         }
 

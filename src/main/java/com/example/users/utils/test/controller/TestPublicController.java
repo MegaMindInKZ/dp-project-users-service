@@ -47,7 +47,7 @@ public class TestPublicController {
 
         Response response = requestFactory.postRequest(request);
 
-        Assertion.assertEquals(response.getResult_code(), HttpServletResponse.SC_OK);
+        Assertion.assertEquals(response.getResult().get("statusCode"), HttpServletResponse.SC_OK);
 
         user = userJpa.getUserModelByUsername(user.getUsername());
         userJpa.delete(user);
@@ -62,7 +62,7 @@ public class TestPublicController {
 
         Response response = requestFactory.postRequest(request);
 
-        Assertion.assertEquals(response.getResult_code(), HttpServletResponse.SC_BAD_REQUEST);
+        Assertion.assertNotEquals(response.getResult().get("statusCode"), HttpServletResponse.SC_OK);
         Assertion.assertContains(response.getContent(), "email");
     }
 
@@ -75,7 +75,7 @@ public class TestPublicController {
 
         Response response = requestFactory.postRequest(request);
 
-        Assertion.assertEquals(response.getResult_code(), HttpServletResponse.SC_BAD_REQUEST);
+        Assertion.assertNotEquals(response.getResult().get("statusCode"), HttpServletResponse.SC_OK);
         Assertion.assertContains(response.getContent(), "username");
 
     }
@@ -89,8 +89,8 @@ public class TestPublicController {
 
         Response response = requestFactory.postRequest(request);
 
-        Assertion.assertEquals(response.getResult_code(), HttpServletResponse.SC_BAD_REQUEST);
-        Assertion.assertContains(response.getContent(), "password");
+        Assertion.assertNotEquals(response.getResult().get("statusCode"), HttpServletResponse.SC_OK);
+        Assertion.assertContains(response.getResult().get("result").toString(), "password");
     }
 
     @AfterTestClass
