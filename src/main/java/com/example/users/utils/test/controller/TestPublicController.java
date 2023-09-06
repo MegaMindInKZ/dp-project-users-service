@@ -1,69 +1,95 @@
 package com.example.users.utils.test.controller;
 
-import com.example.users.beans.Response;
-import com.example.users.components.controllers.PublicController;
 import com.example.users.data.entities.User;
 import com.example.users.data.repositories.UserJpa;
+import com.example.users.utils.exceptions.NotFoundException;
 import com.example.users.utils.http.request.Request;
 import com.example.users.utils.http.request.RequestFactory;
+import com.example.users.utils.http.response.Response;
 import com.example.users.utils.test.annotations.*;
+import com.example.users.utils.test.assertions.Assertion;
 import com.example.users.utils.test.exceptions.NotPassedException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.http.MediaType;
 
 @Test
 public class TestPublicController {
-    @Autowired
-    private PublicController publicController;
     @Autowired
     private UserJpa userJpa;
     @Autowired
     private RequestFactory requestFactory;
     private final String requestCommonURIPath = "/users/public";
-    ObjectMapper objectMapper = new ObjectMapper();
-
     private User user;
 
     @BeforeTestClass
     public void createUser(){
-        System.out.println("before");
-    }
-
-    @Test
-    public void register(){
         user = new User();
         user.setUsername("123456789d");
         user.setPassword("kazsadfakh1");
+        user.setEmail("email");
         user.setFullname("Kazakh");
 
-        System.out.println("test");
+        userJpa.save(user);
+    }
+
+    @Test
+    public void registerShouldBeSuccessful(){
+        User user = new User();
+        user.setUsername("Zanggar");
+        user.setPassword("12345678");
+        user.setFullname("Zanggar Zhumagaliyev");
+        user.setEmail("megamindinkz@gmail.com");
 
         Request request = new Request();
-        request.setMethod(Request.postMethod);
-        request.setContentType("application/json");
+        request.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        request.setUriPath(requestCommonURIPath + "/register");
+        request.setContent(user);
+
+        Response response = requestFactory.postRequest(request);
+
+        Assertion.assertEquals(response.getResult_code(), HttpServletResponse.SC_OK);
+
+        user = userJpa.getUserModelByUsername(user.getUsername());
+        userJpa.delete(user);
+    }
+
+    @Test
+    public void registerBadRequestAndEmailInvalid(){
+        Request request = new Request();
+        request.setContentType(MediaType.APPLICATION_JSON_VALUE);
         request.setUriPath(requestCommonURIPath + "/register");
 
         request.setContent(user);
 
-        Response response = null;
-        try {
-            response = requestFactory.request(request);
-        }catch (Exception e){
-        }
-        if(response.getStatusCode() != HttpServletResponse.SC_BAD_REQUEST)
-            throw new NotPassedException();
-        if(!response.getResult().toString().contains("sd"))
-            throw new NotPassedException();
+        com.example.users.utils.http.response.Response response = requestFactory.postRequest(request);
+
+        Assertion.assertEquals(response.getResult_code(), HttpServletResponse.SC_BAD_REQUEST);
+        Assertion.assertContains(response.getContent(), "email");
+    }
+
+    @Test
+    public void registerBadRequestAndUsernameInvalid(){
+        Request request = new Request();
+        request.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        request.setUriPath(requestCommonURIPath + "/register");
+
+        request.setContent(user);
+
+    }
+
+    @Test
+    public void registerBadRequestAndPasswordInvalid(){
+        Request request = new Request();
+        request.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        request.setUriPath(requestCommonURIPath + "/register");
+
+        request.setContent(user);
     }
 
     @AfterTestClass
     public void deleteUser(){
-        userJpa.delete(user);
+        User temp = userJpa.getUserModelByUsername(user.getUsername());
+        userJpa.delete(temp);
     }
 }

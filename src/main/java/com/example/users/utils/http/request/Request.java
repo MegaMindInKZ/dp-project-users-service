@@ -2,6 +2,7 @@ package com.example.users.utils.http.request;
 
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Data
@@ -10,7 +11,15 @@ public class Request {
     public final static String getMethod = "GET";
     private String method;
     private String uriPath;
-    private Map<String, Object> uriParameter;
+    private Map<String, Object> uriParameter = new HashMap<>();
     private Object content;
     private String contentType;
+
+    public String getUri(){
+       String result = uriPath + "?";
+       for(var entry: uriParameter.entrySet()){
+           result = result + entry.getKey() + "=" + entry.getValue().toString();
+       }
+       return result;
+    }
 }
