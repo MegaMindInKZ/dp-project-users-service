@@ -25,8 +25,8 @@ public class TestPublicController {
     @BeforeTestClass
     public void createUser(){
         user = new User();
-        user.setUsername("123456789d");
-        user.setPassword("kazsadfakh1");
+        user.setUsername("1234");
+        user.setPassword("1234");
         user.setEmail("email");
         user.setFullname("Kazakh");
 
@@ -42,7 +42,6 @@ public class TestPublicController {
         user.setEmail("megamindinkz@gmail.com");
 
         Request request = new Request();
-        request.setContentType(MediaType.APPLICATION_JSON_VALUE);
         request.setUriPath(requestCommonURIPath + "/register");
         request.setContent(user);
 
@@ -57,12 +56,11 @@ public class TestPublicController {
     @Test
     public void registerBadRequestAndEmailInvalid(){
         Request request = new Request();
-        request.setContentType(MediaType.APPLICATION_JSON_VALUE);
         request.setUriPath(requestCommonURIPath + "/register");
 
         request.setContent(user);
 
-        com.example.users.utils.http.response.Response response = requestFactory.postRequest(request);
+        Response response = requestFactory.postRequest(request);
 
         Assertion.assertEquals(response.getResult_code(), HttpServletResponse.SC_BAD_REQUEST);
         Assertion.assertContains(response.getContent(), "email");
@@ -71,20 +69,28 @@ public class TestPublicController {
     @Test
     public void registerBadRequestAndUsernameInvalid(){
         Request request = new Request();
-        request.setContentType(MediaType.APPLICATION_JSON_VALUE);
         request.setUriPath(requestCommonURIPath + "/register");
 
         request.setContent(user);
+
+        Response response = requestFactory.postRequest(request);
+
+        Assertion.assertEquals(response.getResult_code(), HttpServletResponse.SC_BAD_REQUEST);
+        Assertion.assertContains(response.getContent(), "username");
 
     }
 
     @Test
     public void registerBadRequestAndPasswordInvalid(){
         Request request = new Request();
-        request.setContentType(MediaType.APPLICATION_JSON_VALUE);
         request.setUriPath(requestCommonURIPath + "/register");
 
         request.setContent(user);
+
+        Response response = requestFactory.postRequest(request);
+
+        Assertion.assertEquals(response.getResult_code(), HttpServletResponse.SC_BAD_REQUEST);
+        Assertion.assertContains(response.getContent(), "password");
     }
 
     @AfterTestClass

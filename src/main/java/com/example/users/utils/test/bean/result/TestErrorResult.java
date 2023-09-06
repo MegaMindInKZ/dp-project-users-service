@@ -21,7 +21,7 @@ public class TestErrorResult implements TestResult{
         Exception exception = (Exception) e.getCause();
         errorMessage = exception.getMessage();
         errorClass = exception.getClass().getSimpleName();
-        lineNumber = exception.getStackTrace()[0].getLineNumber();
+        lineNumber = exception.getStackTrace()[1].getLineNumber();
         className = method.getDeclaringClass().getSimpleName();
         methodName = method.getName();
     }

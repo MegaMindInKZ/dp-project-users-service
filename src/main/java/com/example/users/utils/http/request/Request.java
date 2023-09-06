@@ -1,6 +1,7 @@
 package com.example.users.utils.http.request;
 
 import lombok.Data;
+import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ public class Request {
     private String uriPath;
     private Map<String, Object> uriParameter = new HashMap<>();
     private Object content;
-    private String contentType;
+    private String contentType = MediaType.APPLICATION_JSON_VALUE;
 
     public String getUri(){
        String result = uriPath + "?";
